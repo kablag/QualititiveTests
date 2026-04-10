@@ -150,18 +150,18 @@ ui <- fluidPage(
         tags$td("Test P (M)"),
         tags$td(numericInput("tpNumber", "TP", 100)),
         tags$td(numericInput("fpNumber", "FP", 20)),
-        tags$td(textOutput("tpfnTotal"))
+        tags$td(textOutput("tpfpTotal"))
       ),
       tags$tr(
         tags$td("Test N (Wt)"),
         tags$td(numericInput("fnNumber", "FN", 50)),
         tags$td(numericInput("tnNumber", "TN", 200)),
-        tags$td(textOutput("fptnTotal"))
+        tags$td(textOutput("fntnTotal"))
       ),
       tags$tr(
         tags$td(),
-        tags$td(textOutput("tpfpTotal")),
-        tags$td(textOutput("fntnTotal")),
+        tags$td(textOutput("tpfnTotal")),
+        tags$td(textOutput("fptnTotal")),
         tags$td(tags$b(textOutput("grandTotal")))
       )
     )),
@@ -218,7 +218,8 @@ server <- function(input, output) {
       c(input$tpNumber, input$fpNumber,
         input$fnNumber, input$tnNumber)
     tryCatch(
-      epi.tests(dat, conf.level = input$confLvl / 100),
+      epi.tests(dat, conf.level = input$confLvl / 100,
+                digits = 4),
       error = function(e) print("Check input!")
     )
   })
@@ -238,7 +239,8 @@ server <- function(input, output) {
                               } else {
                                 NULL
                               },
-                            conf.level = input$confLvl / 100))
+                            conf.level = input$confLvl / 100),
+            digits = 4)
     },
     error = function(e) print("Check input!")
     )
